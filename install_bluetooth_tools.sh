@@ -10,7 +10,7 @@ sudo apt-get -y upgrade
 echo "Installing dependencies from apt..."
 sudo apt install -y bluez-tools bluez-hcidump libbluetooth-dev \
                     git gcc python3-pip python3-setuptools \
-                    python3-pydbus
+                    python3-pydbus python3-venv
 
 echo "Cloning and installing pybluez from source..."
 git clone https://github.com/pybluez/pybluez.git
@@ -34,13 +34,20 @@ git clone https://github.com/palacita135/BlueDucky.git
 
 cd BlueDucky
 
-echo "Installing BlueDucky Python dependencies..."
+echo "Creating Python virtual environment..."
+sudo python3 -m venv venv
+source venv/bin/activate
+
+echo "Installing BlueDucky Python dependencies in virtual environment..."
 if ! pip install -r requirements.txt; then
     pip install --break-system-packages -r requirements.txt
 fi
 
+echo "Deactivating virtual environment..."
+deactivate
+
 echo "Bringing up bluetooth interface..."
 sudo hciconfig hci0 up
 
-echo "Running BlueDucky..."
+echo "Running BlueDucky (outside virtual environment)..."
 python3 BlueDucky.py
