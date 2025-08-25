@@ -27,4 +27,20 @@ sudo cp bdaddr /usr/local/bin/
 rm -rf ~/bluez
 rm bdaddr
 
-echo "Installation complete!"
+echo "Cloning BlueDucky repository..."
+# Uncomment *one* of the following two lines depending on which repo you want to use:
+# git clone https://github.com/pentestfunctions/BlueDucky.git
+git clone https://github.com/palacita135/BlueDucky.git
+
+cd BlueDucky
+
+echo "Installing BlueDucky Python dependencies..."
+if ! pip install -r requirements.txt; then
+    pip install --break-system-packages -r requirements.txt
+fi
+
+echo "Bringing up bluetooth interface..."
+sudo hciconfig hci0 up
+
+echo "Running BlueDucky..."
+python3 BlueDucky.py
